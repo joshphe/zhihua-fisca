@@ -1,0 +1,380 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================================
+   Claymorphism Design System
+   Based on ui-ux-pro-max claymorphism spec:
+   - Double shadows (inner highlight + outer shadow)
+   - 16-24px border-radius, 3px borders
+   - Pastel warm palette
+   - Soft bounce animations (cubic-bezier 0.34, 1.56)
+   - Press: inset shadow effect (debossed)
+   ======================================== */
+
+:root {
+  /* --- Clay Pastel Palette --- */
+  --clay-bg: #FEFAF6;
+  --clay-surface: #FFFFFF;
+  --clay-surface-alt: #FFF8F2;
+  --clay-border: rgba(180, 140, 120, 0.35);
+  --clay-border-strong: rgba(180, 140, 120, 0.55);
+
+  /* Text — warm deep tones (4.5:1+ contrast on white) */
+  --text-primary: #2D2420;
+  --text-secondary: #5C4F48;
+  --text-muted: #8C8078;
+
+  /* Accent pastels */
+  --accent-terracotta: #C67B5C;
+  --accent-terracotta-soft: rgba(198, 123, 92, 0.12);
+  --accent-blue: #87A7C7;
+  --accent-blue-soft: rgba(135, 167, 199, 0.12);
+  --accent-green: #8CB896;
+  --accent-green-soft: rgba(140, 184, 150, 0.12);
+  --accent-coral: #E8988A;
+  --accent-coral-soft: rgba(232, 152, 138, 0.12);
+
+  /* Semantic colors */
+  --color-success: #6DAF7E;
+  --color-warning: #D4956B;
+  --color-danger: #D4726A;
+  --color-info: #8BA4C7;
+
+  /* --- Clay Shadows ---
+     Light source: top-left
+     Outer shadow: bottom-right (dark)
+     Inner highlight: top-left (light)
+  */
+  --shadow-clay-sm:
+    3px 3px 8px rgba(180, 160, 140, 0.15),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.9);
+  --shadow-clay-md:
+    5px 5px 14px rgba(180, 160, 140, 0.18),
+    inset -3px -3px 6px rgba(255, 255, 255, 0.95);
+  --shadow-clay-lg:
+    8px 8px 22px rgba(180, 160, 140, 0.2),
+    inset -4px -4px 10px rgba(255, 255, 255, 0.95);
+  --shadow-clay-xl:
+    12px 12px 30px rgba(180, 160, 140, 0.22),
+    inset -5px -5px 12px rgba(255, 255, 255, 0.95);
+  --shadow-clay-pressed:
+    inset 3px 3px 8px rgba(180, 160, 140, 0.15),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.5);
+
+  /* --- Clay Border Radius --- */
+  --radius-clay: 20px;
+  --radius-clay-sm: 14px;
+  --radius-clay-lg: 26px;
+  --radius-clay-full: 9999px;
+
+  /* --- Clay Border Width --- */
+  --border-clay: 2.5px;
+
+  /* --- Transitions --- */
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+
+  /* --- Header gradient (warm clay tones) --- */
+  --gradient-header: linear-gradient(135deg, #C67B5C 0%, #D4956B 30%, #D4A88C 60%, #C8B6A0 100%);
+}
+
+/* Dark mode — deeper, warmer tones */
+.dark {
+  --clay-bg: #1E1814;
+  --clay-surface: #2A221D;
+  --clay-surface-alt: #302720;
+  --clay-border: rgba(160, 130, 110, 0.3);
+  --clay-border-strong: rgba(160, 130, 110, 0.5);
+
+  --text-primary: #EDE4DB;
+  --text-secondary: #BCAFA4;
+  --text-muted: #8C7D72;
+
+  --shadow-clay-sm:
+    3px 3px 8px rgba(0, 0, 0, 0.35),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.04);
+  --shadow-clay-md:
+    5px 5px 14px rgba(0, 0, 0, 0.4),
+    inset -3px -3px 6px rgba(255, 255, 255, 0.05);
+  --shadow-clay-lg:
+    8px 8px 22px rgba(0, 0, 0, 0.45),
+    inset -4px -4px 10px rgba(255, 255, 255, 0.05);
+  --shadow-clay-xl:
+    12px 12px 30px rgba(0, 0, 0, 0.5),
+    inset -5px -5px 12px rgba(255, 255, 255, 0.05);
+  --shadow-clay-pressed:
+    inset 3px 3px 8px rgba(0, 0, 0, 0.4),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.02);
+
+  --gradient-header: linear-gradient(135deg, #3D2015 0%, #5C3620 50%, #6B4530 100%);
+}
+
+/* ========================================
+   Base Styles
+   ======================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  background: var(--clay-bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background var(--duration-normal) var(--ease-out),
+              color var(--duration-normal) var(--ease-out);
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp var(--duration-slow) var(--ease-out) both;
+}
+
+.animate-scale-in {
+  animation: scaleIn var(--duration-normal) var(--ease-out) both;
+}
+
+.animate-modal-in {
+  animation: modalIn 300ms var(--ease-bounce) both;
+}
+
+.animate-overlay-in {
+  animation: overlayIn 200ms var(--ease-out) both;
+}
+
+/* Stagger children */
+.stagger-children > * {
+  opacity: 0;
+  animation: fadeInUp var(--duration-slow) var(--ease-out) forwards;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 60ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 120ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 180ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 240ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 360ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 420ms; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ========================================
+   Skeleton Loading
+   ======================================== */
+
+.skeleton {
+  background: linear-gradient(90deg, var(--clay-border) 25%, transparent 50%, var(--clay-border) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-clay-sm);
+}
+
+/* ========================================
+   Claymorphism Component Classes
+   ======================================== */
+
+/* Clay Card — the core surface element */
+.clay-card {
+  background: var(--clay-surface);
+  border: var(--border-clay) solid var(--clay-border);
+  border-radius: var(--radius-clay);
+  box-shadow: var(--shadow-clay-md);
+  padding: 1.5rem;
+  transition:
+    box-shadow var(--duration-normal) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out),
+    border-color var(--duration-normal) var(--ease-out);
+}
+
+.clay-card:hover {
+  box-shadow: var(--shadow-clay-lg);
+  border-color: var(--clay-border-strong);
+}
+
+.clay-card-interactive {
+  cursor: pointer;
+}
+
+.clay-card-interactive:active {
+  box-shadow: var(--shadow-clay-pressed);
+  transform: scale(0.985);
+  transition: all 80ms var(--ease-out);
+}
+
+/* Clay Button */
+.clay-btn {
+  background: var(--clay-surface);
+  border: var(--border-clay) solid var(--clay-border);
+  border-radius: var(--radius-clay-full);
+  box-shadow: var(--shadow-clay-sm);
+  padding: 0.5rem 1.25rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition:
+    box-shadow var(--duration-fast) var(--ease-out),
+    transform 100ms var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.clay-btn:hover {
+  box-shadow: var(--shadow-clay-md);
+  border-color: var(--clay-border-strong);
+}
+
+.clay-btn:active {
+  box-shadow: var(--shadow-clay-pressed);
+  transform: scale(0.96);
+  transition: all 80ms var(--ease-out);
+}
+
+.clay-btn-active {
+  border-color: var(--accent-terracotta);
+  box-shadow: var(--shadow-clay-sm);
+  background: var(--accent-terracotta-soft);
+  color: var(--accent-terracotta);
+}
+
+/* Clay Tag / Badge */
+.clay-tag {
+  display: inline-block;
+  background: var(--clay-surface);
+  border: 2px solid var(--clay-border);
+  border-radius: var(--radius-clay-full);
+  padding: 0.15rem 0.65rem;
+  font-size: 0.625rem;
+  color: var(--text-muted);
+  box-shadow: var(--shadow-clay-sm);
+}
+
+/* Gradient Header */
+.gradient-header {
+  background: var(--gradient-header);
+  position: relative;
+}
+
+.gradient-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 30% 40%, rgba(255, 255, 255, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 80%, rgba(0, 0, 0, 0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Section title */
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--clay-border);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Focus ring */
+*:focus-visible {
+  outline: 2.5px solid var(--accent-terracotta);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Selection */
+::selection {
+  background: var(--accent-terracotta-soft);
+  color: var(--text-primary);
+}
+
+/* ========================================
+   Chart overrides for clay aesthetic
+   ======================================== */
+
+/* Make ECharts canvas blend with clay background */
+.clay-card .echarts-for-react canvas {
+  border-radius: var(--radius-clay-sm);
+}
+
+/* ========================================
+   Fixed-height grid cards — aligned, scroll internally
+   ======================================== */
+
+.grid-cards-fixed {
+  align-items: stretch;
+}
+
+@media (min-width: 1024px) {
+  .grid-cards-fixed > .clay-card {
+    max-height: 560px;
+    overflow-y: auto;
+  }
+}
